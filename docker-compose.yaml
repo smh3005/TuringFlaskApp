@@ -3,6 +3,7 @@ services:
   web:
     build: .
     ports:
-      - "80:5000"
-  redis:
-    image: "redis:alpine"
+      - "5000:5000"
+    volumes:
+      - .:/code
+    command: sh -c "pip install -r requirements.txt && flask run --host=0.0.0.0"
