@@ -1,10 +1,9 @@
-version: "3.9"
+version: "3.3"
 services:
   web:
     build: .
     ports:
-      - "80:5000"
-      - "443:5000"
+      - "443:8000"
     volumes:
       - .:/code
-    command: sh -c "pip install -r requirements.txt && flask run --host=0.0.0.0"
+    command: sh -c "pip install -r requirements.txt && gunicorn --certfile=theturinggames.crt --keyfile=theturinggames.key -b 0.0.0.0:8000 -w 4 app.wsgi:app"
