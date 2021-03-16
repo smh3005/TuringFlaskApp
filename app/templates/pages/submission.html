@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Submission Page{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+  Click to submit your code here
+  <form action="{{ url_for('pages.upload')}}" method="POST"}
+    enctype = "multipart/form-data">
+    <input type="file" name="file">
+    <input type="submit">
+  </form>
+
+{% endblock %}
