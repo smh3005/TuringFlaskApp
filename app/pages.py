@@ -3,6 +3,7 @@ from flask import Markup
 import functools
 import os
 import boto3, botocore
+import io
 from app.config import S3_KEY, S3_SECRET, S3_BUCKET, S3_LOCATION
 
 from flask import (
@@ -11,7 +12,7 @@ from flask import (
 
 from werkzeug.security import check_password_hash, generate_password_hash
 from werkzeug.utils import secure_filename
-from werkzeug.datastructures import FileStorage
+#from werkzeug.datastructures import FileStorage
 
 from app.db import get_db
 from app.auth import login_required
@@ -38,7 +39,6 @@ def account():
     return render_template('pages/account.html')
 
 def upload_file(file, bucket_name, acl="public-read"):
-    print(S3_KEY, S3_SECRET)
     s3 = boto3.client("s3", aws_access_key_id=S3_KEY, aws_secret_access_key=S3_SECRET)
     try:
         s3.upload_fileobj(file, bucket_name, file.filename, ExtraArgs={"ACL": acl, "ContentType": file.content_type})
@@ -63,8 +63,8 @@ def upload():
         if file.filename == "":
             return "Please select a file"
         if file and allowed_file(file.filename):
-            print(file.filename)
             file.filename = secure_filename(file.filename)
+            print(S3_BUCKET)
             output = upload_file(file, S3_BUCKET)
             return str(output)
     return render_template('pages/submission.html')
